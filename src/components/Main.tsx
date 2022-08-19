@@ -6,12 +6,21 @@ import NewNote from "./NewNote";
 
 export type State = { notes: Note[] };
 
+const parseListFromStorage = () => {
+  const storage = localStorage.getItem("notes");
+  if (storage) {
+    return JSON.parse(storage);
+  }
+  return [];
+};
+
 export default class Main extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
 
+    const savedList = parseListFromStorage();
     this.state = {
-      notes: getInitialData(),
+      notes: savedList.length > 0 ? savedList : getInitialData(),
     };
     this.eventSubmitNewNote = this.eventSubmitNewNote.bind(this);
   }
@@ -19,6 +28,7 @@ export default class Main extends Component<{}, State> {
   eventSubmitNewNote = (newList: Note[]) => {
     this.setState(
       () => {
+        localStorage.setItem("notes", JSON.stringify(newList));
         return {
           notes: newList,
         };

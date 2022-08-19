@@ -5,11 +5,13 @@ const onNoteDelete = (list: Note[], noteId: any) => {
   const noteList = list;
   const index = noteList.map((item) => item.id).indexOf(noteId);
   list.splice(index, 1);
+  localStorage.setItem("notes", JSON.stringify(noteList));
 };
 const onNoteArchive = (list: Note[], noteId: any) => {
   const noteList = list;
   const index = noteList.map((item) => item.id).indexOf(noteId);
   list[index].archived = !list[index].archived;
+  localStorage.setItem("notes", JSON.stringify(noteList));
 };
 
 /* Components */
