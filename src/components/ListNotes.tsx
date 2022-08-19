@@ -1,17 +1,22 @@
 import React, { useReducer } from "react";
 import { Note, NoteActionEvents } from "../data/Note";
+import { parseListFromStorage, saveListToStorage } from "../utils";
 
 const onNoteDelete = (list: Note[], noteId: any) => {
   const noteList = list;
+  const savedData = parseListFromStorage();
   const index = noteList.map((item) => item.id).indexOf(noteId);
-  list.splice(index, 1);
-  localStorage.setItem("notes", JSON.stringify(noteList));
+  noteList.splice(index, 1);
+  savedData.splice(index, 1);
+  saveListToStorage(savedData);
 };
 const onNoteArchive = (list: Note[], noteId: any) => {
   const noteList = list;
+  const savedData = parseListFromStorage();
   const index = noteList.map((item) => item.id).indexOf(noteId);
-  list[index].archived = !list[index].archived;
-  localStorage.setItem("notes", JSON.stringify(noteList));
+  savedData[index].archived = noteList[index].archived =
+    !noteList[index].archived;
+  saveListToStorage(savedData);
 };
 
 /* Components */
