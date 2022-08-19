@@ -60,7 +60,7 @@ const NewNote = (props: { currentState: any; onSubmit: any }) => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteBody, setnoteBody] = useState("");
   const maxTitleChars = 50;
-  let refCharRemain = React.createRef<HTMLDivElement>();
+  const refCharRemain = React.createRef<HTMLDivElement>();
 
   return (
     <div className="container-newnote card">

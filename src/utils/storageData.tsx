@@ -1,4 +1,6 @@
-export const parseListFromStorage = () => {
+import { Note } from "../data/Note";
+
+export const parseListFromStorage = (): Note[] => {
   const storage = localStorage.getItem("notes");
   if (storage) {
     return JSON.parse(storage);

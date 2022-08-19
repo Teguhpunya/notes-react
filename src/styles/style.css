@@ -152,6 +152,11 @@ button.red:hover {
   box-shadow: 0 0 16px 2px darkred;
 }
 
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   border-radius: 0 0 8px 8px;
   padding: 12px;
@@ -161,7 +166,13 @@ header {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
 }
-
+.container-search {
+  display: flex;
+  margin: 1em 5%;
+}
+#input-search {
+  width: 100%;
+}
 main {
   display: flex;
   margin: 2em 5%;

@@ -8,7 +8,7 @@ import {
 import ListNotes from "./ListNotes";
 import NewNote from "./NewNote";
 
-export type State = { notes: Note[] };
+type State = { notes: Note[]; searchQuery: string };
 
 export default class Main extends Component<{}, State> {
   constructor(props: {}) {
@@ -17,9 +17,11 @@ export default class Main extends Component<{}, State> {
     const savedList = parseListFromStorage();
     this.state = {
       notes: savedList.length > 0 ? savedList : getInitialData(),
+      searchQuery: "",
     };
     if (savedList.length < 1) saveListToStorage(this.state.notes);
     this.eventSubmitNewNote = this.eventSubmitNewNote.bind(this);
+    this.eventOnSearchNote = this.eventOnSearchNote.bind(this);
   }
 
   eventSubmitNewNote = (newList: Note[]) => {
@@ -33,13 +35,44 @@ export default class Main extends Component<{}, State> {
       () => alert("Note added")
     );
   };
+  eventOnSearchNote = (input: string) => {
+    this.setState(() => {
+      return { searchQuery: input };
+    });
+    const originList = parseListFromStorage();
+    const _input = input.toLowerCase();
+    const result = originList.filter(
+      (note) =>
+        note.title.toLowerCase().includes(_input) ||
+        note.body.toLowerCase().includes(_input)
+    );
+    this.setState(() => {
+      return { notes: result };
+    });
+  };
 
   render() {
     return (
-      <main>
-        <NewNote currentState={this.state} onSubmit={this.eventSubmitNewNote} />
-        <ListNotes notes={this.state.notes} />
-      </main>
+      <>
+        <div className="container-search">
+          <input
+            type="text"
+            id="input-search"
+            placeholder="Cari catatan.."
+            onChange={(e) => {
+              this.eventOnSearchNote(e.target.value);
+            }}
+            value={this.state.searchQuery}
+          />
+        </div>
+        <main>
+          <NewNote
+            currentState={this.state}
+            onSubmit={this.eventSubmitNewNote}
+          />
+          <ListNotes notes={this.state.notes} />
+        </main>
+      </>
     );
   }
 }
