@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import "./styles/style.css";
@@ -10,6 +11,7 @@ function App() {
     <div className="App">
       <Header title={titleApp} />
       <Main />
+      <Footer />
     </div>
   );
 }

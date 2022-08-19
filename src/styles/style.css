@@ -242,3 +242,19 @@ h2 + * {
 .item-note .item-actions > * + * {
   margin-top: 4px;
 }
+
+footer {
+  background-color: var(--color-surface);
+  color: var(--color-tertiary);
+  margin: 1.5em 0;
+  width: fit-content;
+  border-radius: 0 8px 8px 0;
+  padding: 8px;
+}
+footer > a {
+  background-color: var(--color-tertiary);
+  color: var(--color-on-tertiary);
+  padding: 0 0.5em;
+  cursor: pointer;
+  border-radius: 4px;
+}
