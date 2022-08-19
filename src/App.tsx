@@ -1,15 +1,15 @@
 import React from "react";
+import Header from "./components/Header";
+import Main from "./components/Main";
 import "./styles/style.css";
+
+const titleApp = "Yet another notes";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
-      <div>Hello world</div>
+      <Header title={titleApp} />
+      <Main />
     </div>
   );
 }
