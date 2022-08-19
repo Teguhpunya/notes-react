@@ -68,7 +68,7 @@ const ListNotes = (props: { notes: Note[] }) => {
   return (
     <div className="container-notes">
       <div className="list-default">
-        <h2>Catatanku</h2>
+        <h2 className="card">Catatanku</h2>
         <div className="list-background card">
           <div className="list-note">
             {RenderNoteList(initialNotes, defaultNotes, forceRender)}
@@ -76,7 +76,7 @@ const ListNotes = (props: { notes: Note[] }) => {
         </div>
       </div>
       <div className="list-default">
-        <h2>Arsip</h2>
+        <h2 className="card">Arsip</h2>
         <div className="list-background card">
           <div className="list-note">
             {RenderNoteList(initialNotes, archivedNotes, forceRender)}
