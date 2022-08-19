@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { showFormattedDate } from "../utils";
+import { parseListFromStorage, showFormattedDate } from "../utils";
 
 /* Methods */
 const submitNewNote = (
@@ -16,7 +16,7 @@ const submitNewNote = (
     archived: false,
     createdAt: showFormattedDate(currentTime),
   };
-  const newList = currentState.notes;
+  const newList = parseListFromStorage();
   newList.push(newNote);
   setNewState(newList);
 };
