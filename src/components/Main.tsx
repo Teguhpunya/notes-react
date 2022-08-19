@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import { Note } from "../data/Note";
-import { getInitialData } from "../utils";
+import {
+  getInitialData,
+  parseListFromStorage,
+  saveListToStorage,
+} from "../utils";
 import ListNotes from "./ListNotes";
 import NewNote from "./NewNote";
 
 export type State = { notes: Note[] };
-
-const parseListFromStorage = () => {
-  const storage = localStorage.getItem("notes");
-  if (storage) {
-    return JSON.parse(storage);
-  }
-  return [];
-};
 
 export default class Main extends Component<{}, State> {
   constructor(props: {}) {
@@ -22,13 +18,14 @@ export default class Main extends Component<{}, State> {
     this.state = {
       notes: savedList.length > 0 ? savedList : getInitialData(),
     };
+    if (savedList.length < 1) saveListToStorage(this.state.notes);
     this.eventSubmitNewNote = this.eventSubmitNewNote.bind(this);
   }
 
   eventSubmitNewNote = (newList: Note[]) => {
     this.setState(
       () => {
-        localStorage.setItem("notes", JSON.stringify(newList));
+        saveListToStorage(newList);
         return {
           notes: newList,
         };
