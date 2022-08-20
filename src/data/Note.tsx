@@ -6,6 +6,7 @@ export type Note = {
   archived: boolean;
 };
 export type NoteActionEvents = {
-  archiveNote: any;
-  deleteNote: any;
+  archiveNote: (noteId: number) => void;
+  deleteNote: (noteId: number) => void;
+  onClickNote: (state: { display: string; contents: Note }) => void;
 };

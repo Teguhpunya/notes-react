@@ -1,5 +1,6 @@
 :root {
   --color-background: #1c1b19;
+  --color-background-transparent: #1c1b19a4;
   --color-on-background: #e6e2de;
   --color-surface: #272623;
   --color-on-surface: #e6e2de;
@@ -232,7 +233,6 @@ h2 + * {
 .item-note p {
   display: flex;
   flex-direction: column;
-  height: 135px;
   overflow: hidden;
 }
 .item-note .item-actions {
@@ -241,6 +241,37 @@ h2 + * {
 }
 .item-note .item-actions > * + * {
   margin-top: 4px;
+}
+
+.container-fixed {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: var(--color-background-transparent);
+  width: 100%;
+  height: 100%;
+  padding: 10%;
+}
+.container-fixed > .container-fixed-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 0 16px 2px var(--color-primary);
+}
+.container-fixed-content > div p {
+  margin-top: 2em;
+}
+.container-fixed-content .item-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.container-fixed-content .item-actions > * + * {
+  margin-left: 1em;
 }
 
 footer {

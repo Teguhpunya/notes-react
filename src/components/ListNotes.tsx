@@ -1,47 +1,28 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { Note, NoteActionEvents } from "../data/Note";
-import { parseListFromStorage, saveListToStorage } from "../utils";
-
-const onNoteDelete = (list: Note[], noteId: any) => {
-  const noteList = list;
-  const savedData = parseListFromStorage();
-  const index = noteList.map((item) => item.id).indexOf(noteId);
-  noteList.splice(index, 1);
-  savedData.splice(index, 1);
-  saveListToStorage(savedData);
-};
-const onNoteArchive = (list: Note[], noteId: any) => {
-  const noteList = list;
-  const savedData = parseListFromStorage();
-  const index = noteList.map((item) => item.id).indexOf(noteId);
-  savedData[index].archived = noteList[index].archived =
-    !noteList[index].archived;
-  saveListToStorage(savedData);
-};
 
 /* Components */
 const RenderNote = (props: { note: Note; actionEvents: NoteActionEvents }) => {
   return (
-    <div className="item-note card">
+    <div
+      className="item-note card"
+      onClick={() => {
+        props.actionEvents.onClickNote({
+          display: "block",
+          contents: props.note,
+        });
+      }}
+    >
       <h3>{props.note.title}</h3>
       <p>{props.note.body}</p>
-      <div className="item-actions">
-        <button className="green" onClick={props.actionEvents.archiveNote}>
-          {props.note.archived ? "Batalkan arsip" : "Arsipkan"}
-        </button>
-        <button className="red" onClick={props.actionEvents.deleteNote}>
-          Hapus
-        </button>
-      </div>
+
       <div className="caption">{props.note.createdAt}</div>
     </div>
   );
 };
-
 const RenderNoteList = (
-  initialList: Note[],
   filteredList: Note[],
-  forceRender: any
+  actionEvents: NoteActionEvents
 ) => {
   if (filteredList.length < 1) return <div className="div-empty">Kosong!</div>;
   else
@@ -50,23 +31,29 @@ const RenderNoteList = (
         note={item}
         key={item.id}
         actionEvents={{
-          archiveNote: () => {
-            onNoteArchive(initialList, item.id);
-            forceRender();
-          },
-          deleteNote: () => {
-            onNoteDelete(initialList, item.id);
-            forceRender();
-          },
+          archiveNote: actionEvents.archiveNote,
+          deleteNote: actionEvents.deleteNote,
+          onClickNote: actionEvents.onClickNote,
         }}
       />
     ));
 };
 
 /* Main */
-const ListNotes = (props: { notes: Note[] }) => {
-  const [, forceRender] = useReducer((x) => x + 1, 0);
-  const initialNotes = props.notes;
+type Props = {
+  currentState: State;
+  noteActionEvents: NoteActionEvents;
+};
+type State = {
+  notes: Note[];
+  searchQuery: string;
+  displayFixedContainer: string;
+};
+
+const ListNotes = (props: Props) => {
+  const currentState = props.currentState;
+  const actionEvents = props.noteActionEvents;
+  const initialNotes = currentState.notes;
   const defaultNotes = initialNotes.filter((note) => !note.archived);
   const archivedNotes = initialNotes.filter((note) => note.archived);
 
@@ -76,7 +63,7 @@ const ListNotes = (props: { notes: Note[] }) => {
         <h2 className="card">Catatanku</h2>
         <div className="list-background card">
           <div className="list-note">
-            {RenderNoteList(initialNotes, defaultNotes, forceRender)}
+            {RenderNoteList(defaultNotes, actionEvents)}
           </div>
         </div>
       </div>
@@ -84,7 +71,7 @@ const ListNotes = (props: { notes: Note[] }) => {
         <h2 className="card">Arsip</h2>
         <div className="list-background card">
           <div className="list-note">
-            {RenderNoteList(initialNotes, archivedNotes, forceRender)}
+            {RenderNoteList(archivedNotes, actionEvents)}
           </div>
         </div>
       </div>
