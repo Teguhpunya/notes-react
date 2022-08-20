@@ -22,6 +22,10 @@ const RenderNoteContents = (props: {
           onClick={(e) => {
             e.stopPropagation();
             props.actionEvents.archiveNote(_id);
+            props.actionEvents.onClickNote({
+              display: "none",
+              contents: props.note,
+            });
           }}
         >
           {props.note.archived ? "Batalkan arsip" : "Arsipkan"}
@@ -31,6 +35,10 @@ const RenderNoteContents = (props: {
           onClick={(e) => {
             e.stopPropagation();
             props.actionEvents.deleteNote(_id);
+            props.actionEvents.onClickNote({
+              display: "none",
+              contents: props.note,
+            });
           }}
         >
           Hapus

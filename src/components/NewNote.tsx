@@ -74,6 +74,7 @@ const NewNote = (props: { currentState: any; onSubmit: any }) => {
             currentState,
             props.onSubmit
           );
+          alert("Catatan berhasil disimpan");
         }}
       >
         <input

@@ -40,15 +40,12 @@ export default class Main extends Component<{}, State> {
   }
 
   eventSubmitNewNote = (newList: Note[]) => {
-    this.setState(
-      () => {
-        saveListToStorage(newList);
-        return {
-          notes: newList,
-        };
-      },
-      () => alert("Note added")
-    );
+    this.setState(() => {
+      saveListToStorage(newList);
+      return {
+        notes: newList,
+      };
+    });
   };
   eventOnSearchNote = (input: string) => {
     this.setState(() => {
@@ -83,11 +80,14 @@ export default class Main extends Component<{}, State> {
     noteList.splice(index, 1);
     savedData.splice(index, 1);
     saveListToStorage(savedData);
-    this.setState(() => {
-      return {
-        notes: noteList,
-      };
-    });
+    this.setState(
+      () => {
+        return {
+          notes: noteList,
+        };
+      },
+      () => alert("Catatan berhasil dihapus")
+    );
   };
   eventOnNoteArchive = (noteId: number) => {
     const noteList = this.state.notes;
@@ -96,11 +96,14 @@ export default class Main extends Component<{}, State> {
     savedData[index].archived = noteList[index].archived =
       !noteList[index].archived;
     saveListToStorage(savedData);
-    this.setState(() => {
-      return {
-        notes: noteList,
-      };
-    });
+    this.setState(
+      () => {
+        return {
+          notes: noteList,
+        };
+      },
+      () => alert("Catatan telah dipindahkan")
+    );
   };
   actionEvents = {
     archiveNote: this.eventOnNoteArchive,
