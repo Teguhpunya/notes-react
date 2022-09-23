@@ -1,6 +1,6 @@
 {
   "name": "notes-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "homepage": "https://teguhpunya.github.io/notes-react",
   "dependencies": {
@@ -12,8 +12,11 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "gh-pages": "^4.0.0",
+    "html-react-parser": "^3.0.4",
+    "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"

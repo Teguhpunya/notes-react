@@ -5,8 +5,3 @@ export type Note = {
   createdAt: string;
   archived: boolean;
 };
-export type NoteActionEvents = {
-  archiveNote: (noteId: number) => void;
-  deleteNote: (noteId: number) => void;
-  onClickNote: (state: { display: string; contents: Note }) => void;
-};

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { parseListFromStorage, showFormattedDate } from "../utils";
+import { useNavigate } from "react-router-dom";
+import {
+  parseListFromStorage,
+  saveListToStorage,
+  showFormattedDate,
+} from "../utils";
 
 /* Methods */
-const submitNewNote = (
-  noteTitle: string,
-  noteBody: string,
-  currentState: any,
-  setNewState: any
-) => {
+const createNote = (noteTitle: string, noteBody: string) => {
   const currentTime = +new Date();
   const newNote = {
     id: currentTime,
@@ -18,32 +18,14 @@ const submitNewNote = (
   };
   const newList = parseListFromStorage();
   newList.push(newNote);
-  setNewState(newList);
+  saveListToStorage(newList);
 };
 
-const eventSubmitNewNote = (
-  e: any,
-  noteTitle: string,
-  noteBody: string,
-  currentState: any,
-  setNewState: any
-) => {
+const eventCreateNote = (e: any, noteTitle: string, noteBody: string) => {
   e.preventDefault();
-  submitNewNote(noteTitle, noteBody, currentState, setNewState);
+  createNote(noteTitle, noteBody);
 };
 
-/* Components */
-// const TextRemaining = (props: {
-//   inputText: string;
-//   maxChar: number;
-// }) => {
-//   const _maxChar = props.maxChar;
-//   return (
-//     <div className="char-remaining">
-//       Sisa karakter: {_maxChar - props.inputText.length}
-//     </div>
-//   );
-// };
 const TextRemaining = React.forwardRef(
   (props: { maxChar: number; inputText: string }, ref: any) => {
     const _maxChar = props.maxChar;
@@ -55,26 +37,22 @@ const TextRemaining = React.forwardRef(
   }
 );
 /* Main */
-const NewNote = (props: { currentState: any; onSubmit: any }) => {
-  const [currentState] = useState(props.currentState);
+const NewNote = () => {
   const [noteTitle, setNoteTitle] = useState("");
-  const [noteBody, setnoteBody] = useState("");
+  const [noteBody, setNoteBody] = useState("");
   const maxTitleChars = 50;
   const refCharRemain = React.createRef<HTMLDivElement>();
+  const navigate = useNavigate();
+  const home = "/notes-react";
 
   return (
     <div className="container-newnote card">
       <h2>Catatan baru</h2>
       <form
         onSubmit={(e) => {
-          eventSubmitNewNote(
-            e,
-            noteTitle,
-            noteBody,
-            currentState,
-            props.onSubmit
-          );
+          eventCreateNote(e, noteTitle, noteBody);
           alert("Catatan berhasil disimpan");
+          navigate(home);
         }}
       >
         <input
@@ -106,16 +84,14 @@ const NewNote = (props: { currentState: any; onSubmit: any }) => {
           inputText={noteTitle}
           maxChar={maxTitleChars}
         />
-        <textarea
-          name=""
+        <div
           id="add-note-content"
           placeholder="Isi catatan"
-          onChange={(e) => {
-            setnoteBody(e.target.value);
+          contentEditable
+          onInput={(e) => {
+            setNoteBody(e.currentTarget.innerHTML);
           }}
-          value={noteBody}
-          required
-        />
+        ></div>
         <button id="btn-create" type="submit">
           Buat
         </button>

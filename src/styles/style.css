@@ -14,9 +14,10 @@
 
 /* Mobile */
 @media only screen and (max-width: 60em) {
-  main {
+  header {
     flex-direction: column;
   }
+  header > * + *,
   main > * + * {
     margin-top: 2em;
   }
@@ -85,7 +86,7 @@ h2 {
 }
 
 input,
-textarea {
+#add-note-content {
   padding: 12px;
   margin: 12px 0;
   font-family: "Inter", sans-serif;
@@ -154,10 +155,14 @@ button.red:hover {
 }
 
 header {
+  display: flex;
+  justify-content: space-between;
   border-radius: 0 0 8px 8px;
   padding: 12px;
-  text-align: center;
+  /* text-align: center; */
   background-color: var(--color-surface);
+}
+header * {
   color: var(--color-on-surface);
 }
 .container-search {
@@ -169,6 +174,7 @@ header {
 }
 main {
   display: flex;
+  flex-direction: column;
   margin: 0 5%;
 }
 
@@ -243,37 +249,30 @@ h2 + * {
   margin-top: 4px;
 }
 
-.container-fixed {
-  display: none;
-  position: fixed;
-  left: 0;
-  top: 0;
-  background-color: var(--color-background-transparent);
-  width: 100%;
-  height: 100%;
-  padding: 10%;
-}
-.container-fixed > .container-fixed-content {
+.container-detail {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
   height: 100%;
+  min-height: 24rem;
+  margin: 8px;
   background-color: var(--color-primary);
   color: var(--color-on-primary);
-  box-shadow: 0 0 16px 2px var(--color-primary);
 }
-.container-fixed-content > div p {
-  margin-top: 2em;
-}
-.container-fixed-content .item-actions {
+
+.container-detail .item-actions {
   display: flex;
   justify-content: flex-end;
 }
-.container-fixed-content .item-actions > * + * {
+.container-detail .item-actions > * + * {
   margin-left: 1em;
 }
-
+.button-new-note {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 0 16px 16px 0;
+}
 footer {
   background-color: var(--color-surface);
   color: var(--color-tertiary);
@@ -288,4 +287,11 @@ footer > a {
   padding: 0 0.5em;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.page-not-found {
+  text-align: center;
+}
+.page-not-found > span {
+  font-size: 20rem;
 }
