@@ -2,34 +2,29 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { Note } from "../data/Note";
-import { parseListFromStorage, saveListToStorage } from "../utils";
+import { getAllNotes, deleteNote, archiveNote, unarchiveNote } from "../utils";
 
 const onNoteDelete = (note: Note) => {
-  const savedData = parseListFromStorage();
-  const index = savedData.map((item: any) => item.id).indexOf(note.id);
-  savedData.splice(index, 1);
-  saveListToStorage(savedData);
+  deleteNote(note.id);
   alert("Catatan berhasil dihapus");
 };
 
 const onNoteArchive = (note: Note) => {
-  const savedData = parseListFromStorage();
-  const index = savedData.map((item: any) => item.id).indexOf(note.id);
-  savedData[index].archived = !savedData[index].archived;
-  saveListToStorage(savedData);
+  if (note.archived) unarchiveNote(note.id);
+  else archiveNote(note.id);
   alert("Catatan berhasil dipindahkan");
 };
 
-const getData = (id: number) => {
-  const savedList = parseListFromStorage();
-  const result = savedList.filter((note) => note.id === id)[0];
+const getData = (id: string) => {
+  const notes = getAllNotes();
+  const result = notes.filter((note) => note.id === id)[0];
   return result;
 };
 
 export default function DetailNote() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const noteData = getData(Number(id));
+  const noteData = getData(String(id));
   const home = "/notes-react";
 
   if (noteData) {
@@ -68,7 +63,8 @@ export default function DetailNote() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              navigate(home);
+              if (noteData.archived) navigate(`${home}/archive`);
+              else navigate(home);
             }}
           >
             Kembali

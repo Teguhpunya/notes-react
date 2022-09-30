@@ -3,11 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { DefaultList } from "../components/ListNotes";
 import SearchBar from "../components/SearchBar";
 import { Note } from "../data/Note";
-import {
-  getInitialData,
-  parseListFromStorage,
-  saveListToStorage,
-} from "../utils";
+import { getAllNotes } from "../utils";
 
 type Props = {
   search: string;
@@ -32,17 +28,15 @@ export default function HomePage() {
 class HomeComponent extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const savedList = parseListFromStorage();
 
     this.state = {
-      notes: savedList.length > 0 ? savedList : getInitialData(),
+      notes: getAllNotes(),
       searchQuery: props.search,
     };
-    if (savedList.length < 1) saveListToStorage(this.state.notes);
   }
 
   eventOnSearchNote = (input: string) => {
-    const originList = parseListFromStorage();
+    const originList = getAllNotes();
     const _input = input.toLowerCase();
     const result = originList.filter(
       (note) =>

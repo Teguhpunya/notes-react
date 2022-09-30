@@ -1,29 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  parseListFromStorage,
-  saveListToStorage,
-  showFormattedDate,
-} from "../utils";
+import { addNote } from "../utils";
 
 /* Methods */
-const createNote = (noteTitle: string, noteBody: string) => {
-  const currentTime = +new Date();
-  const newNote = {
-    id: currentTime,
-    title: noteTitle,
-    body: noteBody,
-    archived: false,
-    createdAt: showFormattedDate(currentTime),
-  };
-  const newList = parseListFromStorage();
-  newList.push(newNote);
-  saveListToStorage(newList);
-};
-
 const eventCreateNote = (e: any, noteTitle: string, noteBody: string) => {
   e.preventDefault();
-  createNote(noteTitle, noteBody);
+  addNote({ title: noteTitle, body: noteBody });
 };
 
 const TextRemaining = React.forwardRef(
