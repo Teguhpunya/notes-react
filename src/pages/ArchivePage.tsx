@@ -24,6 +24,10 @@ class ArchiveComponent extends Component<Props, State> {
     };
   }
 
+  componentDidMount(): void {
+    this.eventOnSearchNote(this.state.searchQuery);
+  }
+
   eventOnSearchNote = (input: string) => {
     this.setState(() => {
       return { searchQuery: input };

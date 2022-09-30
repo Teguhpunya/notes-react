@@ -35,6 +35,10 @@ class HomeComponent extends Component<Props, State> {
     };
   }
 
+  componentDidMount(): void {
+    this.eventOnSearchNote(this.state.searchQuery);
+  }
+
   eventOnSearchNote = (input: string) => {
     const originList = getAllNotes();
     const _input = input.toLowerCase();
