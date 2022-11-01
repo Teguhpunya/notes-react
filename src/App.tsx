@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component, useState } from "react";
 import {
   getAccessToken,
   getUserLogged,
@@ -11,10 +11,11 @@ import NewNoteButton from "./components/NewNoteButton";
 import "./styles/style.css";
 import LoginRoutes from "./routes/LoginRoutes";
 import { useEffect } from "react";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const titleApp = "📓 Yet another notes";
 
-function App() {
+function CoreApp() {
   const [authedUser, setAuthedUser] = useState(getAccessToken());
   const [initializing, setInitializing] = useState(true);
 
@@ -42,11 +43,6 @@ function App() {
     putAccessToken("");
   }
 
-  /* Main */
-  // if (initializing) {
-  //   return null;
-  // }
-
   if (authedUser === null) {
     return (
       <>
@@ -67,6 +63,46 @@ function App() {
       <Footer />
     </>
   );
+}
+
+type State = {
+  theme: string;
+  toggleTheme: Function;
+};
+
+class App extends Component<any, State> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      theme: localStorage.getItem("theme") || "dark",
+      toggleTheme: () => {
+        this.setState((prevState) => {
+          const newTheme = prevState.theme === "dark" ? "light" : "dark";
+          localStorage.setItem("theme", newTheme);
+          return {
+            theme: newTheme,
+          };
+        });
+      },
+    };
+  }
+
+  componentDidMount() {
+    document.documentElement.setAttribute("data-theme", this.state.theme);
+  }
+  componentDidUpdate(prevProps: any, prevState: State) {
+    if (prevState.theme !== this.state.theme) {
+      document.documentElement.setAttribute("data-theme", this.state.theme);
+    }
+  }
+
+  render() {
+    return (
+      <ThemeProvider value={this.state}>
+        <CoreApp />
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;

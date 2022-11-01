@@ -1,16 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-type Props = {};
+import { BsPlusLg } from "react-icons/bs";
 
 const home = "/notes-react";
 
-export default function NewNoteButton({}: Props) {
+export default function NewNoteButton() {
   return (
     <div className="button-new-note">
       <Link to={`${home}/new`}>
         <button>
-          ➕ <br />
+          <BsPlusLg /> <br />
           Note Baru
         </button>
       </Link>

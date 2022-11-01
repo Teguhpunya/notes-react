@@ -10,6 +10,25 @@
   --color-on-secondary: #333027;
   --color-tertiary: #bec9c0;
   --color-on-tertiary: #29332c;
+
+  --button-green: darkgreen;
+  --button-red: darkred;
+}
+[data-theme="light"] {
+  --color-background: hsl(40, 6%, 90%);
+  --color-background-transparent: hsla(40, 6%, 90%, 0.643);
+  --color-on-background: hsl(30, 14%, 11%);
+  --color-surface: hsl(45, 5%, 85%);
+  --color-on-surface: hsl(30, 14%, 11%);
+  --color-primary: hsl(49, 35%, 28%);
+  --color-on-primary: hsl(52, 50%, 86%);
+  --color-secondary: hsl(43, 15%, 24%);
+  --color-on-secondary: hsl(45, 13%, 82%);
+  --color-tertiary: hsl(131, 9%, 23%);
+  --color-on-tertiary: hsl(138, 11%, 82%);
+
+  --button-green: lightgreen;
+  --button-red: red;
 }
 
 /* Mobile */
@@ -34,6 +53,11 @@
 }
 /* Desktop */
 @media only screen and (min-width: 60.1em) {
+  header * {
+    display: flex;
+    align-items: center;
+  }
+  header * + *,
   main > * + * {
     margin-left: 8px;
   }
@@ -139,10 +163,10 @@ button {
   cursor: pointer;
 }
 button.green {
-  color: darkgreen;
+  color: var(--button-green);
 }
 button.red {
-  color: darkred;
+  color: var(--button-red);
 }
 button:hover {
   box-shadow: 0 0 16px 2px var(--color-tertiary);
@@ -162,7 +186,7 @@ header {
   /* text-align: center; */
   background-color: var(--color-surface);
 }
-header * {
+header h1 {
   color: var(--color-on-surface);
 }
 .container-search {
@@ -284,7 +308,7 @@ footer {
 footer > a {
   background-color: var(--color-tertiary);
   color: var(--color-on-tertiary);
-  padding: 0 0.5em;
+  padding: 0.3em 0.5em;
   cursor: pointer;
   border-radius: 4px;
 }
