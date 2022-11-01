@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { Note } from "../data/Note";
 import { getNote, deleteNote, archiveNote, unarchiveNote } from "../utils";
+import LoadingSpinner from "./LoadingSpinner";
 
 const onNoteDelete = async (note: Note) => {
   const result = await deleteNote(note.id);
@@ -32,67 +33,77 @@ export default function DetailNote() {
   const [noteData, setNoteData] = useState<Note>();
   const home = "/notes-react";
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   useEffect(() => {
+    setIsLoading(true);
     async function getData(id: string) {
       const note: Note = (await getNote(id)).data;
       setNoteData(note);
     }
-    if (id) getData(id);
-  });
+    if (id) getData(id).then(() => setIsLoading(false));
+  }, [id]);
 
-  if (noteData) {
-    const title = noteData.title;
-    const createdAt = noteData.createdAt;
-    const body = parse(noteData.body);
-    return (
-      <div className="container-detail card">
-        <div>
-          <h3>{title}</h3>
-          <div className="caption">{createdAt}</div>
+  if (!isLoading) {
+    if (noteData) {
+      const title = noteData.title;
+      const createdAt = noteData.createdAt;
+      const body = parse(noteData.body);
+      return (
+        <div className="container-detail card">
+          <div>
+            <h3>{title}</h3>
+            <div className="caption">{createdAt}</div>
+          </div>
+          <p>{body}</p>
+          <div className="item-actions">
+            <button
+              className="green"
+              onClick={(e) => {
+                e.stopPropagation();
+                onNoteArchive(noteData).then((result) => {
+                  if (result.error) return;
+                  if (!noteData.archived) navigate(home);
+                  else navigate(`${home}/archive`);
+                });
+              }}
+            >
+              {noteData.archived ? "Batalkan arsip" : "Arsipkan"}
+            </button>
+            <button
+              className="red"
+              onClick={(e) => {
+                e.stopPropagation();
+                onNoteDelete(noteData).then((result) => {
+                  if (result.error) return;
+                  navigate(home);
+                });
+              }}
+            >
+              Hapus
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (noteData.archived) navigate(`${home}/archive`);
+                else navigate(home);
+              }}
+            >
+              Kembali
+            </button>
+          </div>
         </div>
-        <p>{body}</p>
-        <div className="item-actions">
-          <button
-            className="green"
-            onClick={(e) => {
-              e.stopPropagation();
-              onNoteArchive(noteData).then((result) => {
-                if (result.error) return;
-                if (!noteData.archived) navigate(home);
-                else navigate(`${home}/archive`);
-              });
-            }}
-          >
-            {noteData.archived ? "Batalkan arsip" : "Arsipkan"}
-          </button>
-          <button
-            className="red"
-            onClick={(e) => {
-              e.stopPropagation();
-              onNoteDelete(noteData).then((result) => {
-                if (result.error) return;
-                navigate(home);
-              });
-            }}
-          >
-            Hapus
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (noteData.archived) navigate(`${home}/archive`);
-              else navigate(home);
-            }}
-          >
-            Kembali
-          </button>
+      );
+    } else
+      return (
+        <div className="container-detail card">
+          <div className="div-empty">Catatan tidak ditemukan!</div>
         </div>
-      </div>
-    );
+      );
   } else
     return (
       <div className="container-detail card">
-        <div className="div-empty">Catatan tidak ditemukan!</div>
+        <LoadingSpinner />
       </div>
     );
 }

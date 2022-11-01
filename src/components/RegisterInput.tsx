@@ -1,6 +1,7 @@
 import useInput from "../data/CustomHooks";
 import PropTypes from "prop-types";
 import React from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
 type Props = { register: Function };
 
@@ -26,17 +27,22 @@ const RegisterInput = (props: Props) => {
   const { value: password, onValueChangeHandler: onPassChange } = useInput();
   const { value: password2, onValueChangeHandler: onPassChange2 } = useInput();
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const refConfPasswd = React.createRef<HTMLDivElement>();
 
   function onSubmitHandler(e: { preventDefault: () => void }) {
     e.preventDefault();
+    setIsLoading(true);
 
     if (password !== password2) return;
-    props.register({
-      name: name,
-      email: email,
-      password: password,
-    });
+    props
+      .register({
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then(() => setIsLoading(false));
   }
 
   return (
@@ -76,7 +82,9 @@ const RegisterInput = (props: Props) => {
         inputText={password2}
         mainPasswd={password}
       />
-      <button type="submit">Daftar</button>
+      <button className="button-submit" disabled={isLoading} type="submit">
+        {isLoading ? LoadingSpinner() : "Daftar"}
+      </button>
     </form>
   );
 };

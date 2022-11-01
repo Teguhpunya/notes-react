@@ -1,19 +1,24 @@
 import React from "react";
 import useInput from "../data/CustomHooks";
+import LoadingSpinner from "./LoadingSpinner";
 
 type Props = { input: Function };
 
 const LoginInput = (props: Props) => {
   const { value: email, onValueChangeHandler: onEmailChange } = useInput();
   const { value: password, onValueChangeHandler: onPassChange } = useInput();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   function onSubmitHandler(e: { preventDefault: () => void }) {
     e.preventDefault();
+    setIsLoading(true);
 
-    props.input({
-      email: email,
-      password: password,
-    });
+    props
+      .input({
+        email: email,
+        password: password,
+      })
+      .then(() => setIsLoading(false));
   }
 
   return (
@@ -32,7 +37,9 @@ const LoginInput = (props: Props) => {
         onChange={onPassChange}
         value={password}
       />
-      <button type="submit">Login</button>
+      <button className="button-submit" type="submit" disabled={isLoading}>
+        {isLoading ? LoadingSpinner() : "Login"}
+      </button>
     </form>
   );
 };
