@@ -1,31 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { Note } from "../data/Note";
-import { getAllNotes, deleteNote, archiveNote, unarchiveNote } from "../utils";
+import { getNote, deleteNote, archiveNote, unarchiveNote } from "../utils";
 
-const onNoteDelete = (note: Note) => {
-  deleteNote(note.id);
+const onNoteDelete = async (note: Note) => {
+  const result = await deleteNote(note.id);
+  if (result.error) {
+    alert("Catatan gagal dihapus");
+    return result;
+  }
   alert("Catatan berhasil dihapus");
+  return result;
 };
 
-const onNoteArchive = (note: Note) => {
-  if (note.archived) unarchiveNote(note.id);
-  else archiveNote(note.id);
+const onNoteArchive = async (note: Note) => {
+  let result;
+  if (note.archived) result = await unarchiveNote(note.id);
+  else result = await archiveNote(note.id);
+  if (result.error) {
+    alert("Catatan gagal dipindahkan");
+    return result;
+  }
   alert("Catatan berhasil dipindahkan");
-};
-
-const getData = (id: string) => {
-  const notes = getAllNotes();
-  const result = notes.filter((note) => note.id === id)[0];
   return result;
 };
 
 export default function DetailNote() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const noteData = getData(String(id));
+  const [noteData, setNoteData] = useState<Note>();
   const home = "/notes-react";
+
+  useEffect(() => {
+    async function getData(id: string) {
+      const note: Note = (await getNote(id)).data;
+      setNoteData(note);
+    }
+    if (id) getData(id);
+  }, []);
 
   if (noteData) {
     const title = noteData.title;
@@ -43,9 +56,11 @@ export default function DetailNote() {
             className="green"
             onClick={(e) => {
               e.stopPropagation();
-              onNoteArchive(noteData);
-              if (!noteData.archived) navigate(home);
-              else navigate(`${home}/archive`);
+              onNoteArchive(noteData).then((result) => {
+                if (result.error) return;
+                if (!noteData.archived) navigate(home);
+                else navigate(`${home}/archive`);
+              });
             }}
           >
             {noteData.archived ? "Batalkan arsip" : "Arsipkan"}
@@ -54,8 +69,10 @@ export default function DetailNote() {
             className="red"
             onClick={(e) => {
               e.stopPropagation();
-              onNoteDelete(noteData);
-              navigate(home);
+              onNoteDelete(noteData).then((result) => {
+                if (result.error) return;
+                navigate(home);
+              });
             }}
           >
             Hapus

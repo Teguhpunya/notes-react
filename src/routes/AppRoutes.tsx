@@ -8,7 +8,7 @@ import NewPage from "../pages/NewPage";
 
 export default function AppRoutes() {
   const home = "/notes-react";
-  const noPage = ["/*", `${home}/*`];
+
   return (
     <main>
       <Routes>

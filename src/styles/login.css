@@ -1,0 +1,22 @@
+.container-auth {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0.5;
+  margin-top: 2rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.container-auth > * + * {
+  margin-top: 2rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+a > a {
+  color: currentColor;
+  text-decoration: underline;
+}

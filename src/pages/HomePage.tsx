@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { DefaultList } from "../components/ListNotes";
 import SearchBar from "../components/SearchBar";
 import { Note } from "../data/Note";
-import { getAllNotes } from "../utils";
+import { getActiveNotes } from "../utils/network-data";
 
 type Props = {
   search: string;
@@ -30,20 +30,21 @@ class HomeComponent extends Component<Props, State> {
     super(props);
 
     this.state = {
-      notes: getAllNotes(),
+      notes: [],
       searchQuery: props.search,
     };
+    this.eventOnSearchNote = this.eventOnSearchNote.bind(this);
   }
 
   componentDidMount(): void {
     this.eventOnSearchNote(this.state.searchQuery);
   }
 
-  eventOnSearchNote = (input: string) => {
-    const originList = getAllNotes();
+  eventOnSearchNote = async (input: string) => {
+    const originList = await getActiveNotes();
     const _input = input.toLowerCase();
-    const result = originList.filter(
-      (note) =>
+    const result = originList.data.filter(
+      (note: Note) =>
         note.title.toLowerCase().includes(_input) ||
         note.body.toLowerCase().includes(_input)
     );

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ArchivedList } from "../components/ListNotes";
 import { Note } from "../data/Note";
-import { getAllNotes } from "../utils";
+import { getArchivedNotes } from "../utils";
 
 type Props = {
   search: string;
@@ -19,7 +19,7 @@ class ArchiveComponent extends Component<Props, State> {
     super(props);
 
     this.state = {
-      notes: getAllNotes(),
+      notes: [],
       searchQuery: props.search,
     };
   }
@@ -28,14 +28,11 @@ class ArchiveComponent extends Component<Props, State> {
     this.eventOnSearchNote(this.state.searchQuery);
   }
 
-  eventOnSearchNote = (input: string) => {
-    this.setState(() => {
-      return { searchQuery: input };
-    });
-    const originList = getAllNotes();
+  eventOnSearchNote = async (input: string) => {
+    const originList = await getArchivedNotes();
     const _input = input.toLowerCase();
-    const result = originList.filter(
-      (note) =>
+    const result = originList.data.filter(
+      (note: Note) =>
         note.title.toLowerCase().includes(_input) ||
         note.body.toLowerCase().includes(_input)
     );

@@ -50,7 +50,7 @@ export const DefaultList = (props: Props) => {
   const defaultNotes = initialNotes.filter((note) => !note.archived);
 
   return (
-    <div className="container-notes">
+    <div className="container-base">
       <div className="list-default">
         <h2 className="card">Catatanku</h2>
         <div className="list-background card">
@@ -70,7 +70,7 @@ export const ArchivedList = (props: Props) => {
   const archivedNotes = initialNotes.filter((note) => note.archived);
 
   return (
-    <div className="container-notes">
+    <div className="container-base">
       <div className="list-default">
         <h2 className="card">Arsip</h2>
         <div className="list-background card">
