@@ -1,16 +1,37 @@
 import useInput from "../data/CustomHooks";
 import PropTypes from "prop-types";
+import React from "react";
 
 type Props = { register: Function };
+
+const ConfirmPasswd = React.forwardRef(
+  (
+    props: {
+      mainPasswd: string;
+      inputText: string;
+    },
+    ref: any
+  ) => {
+    return (
+      <div ref={ref} className="char-remaining">
+        Tuliskan ulang password.
+      </div>
+    );
+  }
+);
 
 const RegisterInput = (props: Props) => {
   const { value: name, onValueChangeHandler: onNameChange } = useInput();
   const { value: email, onValueChangeHandler: onEmailChange } = useInput();
   const { value: password, onValueChangeHandler: onPassChange } = useInput();
+  const { value: password2, onValueChangeHandler: onPassChange2 } = useInput();
+
+  const refConfPasswd = React.createRef<HTMLDivElement>();
 
   function onSubmitHandler(e: { preventDefault: () => void }) {
     e.preventDefault();
 
+    if (password !== password2) return;
     props.register({
       name: name,
       email: email,
@@ -35,6 +56,25 @@ const RegisterInput = (props: Props) => {
         id="reg-pass"
         onChange={onPassChange}
         value={password}
+      />
+      <label htmlFor="reg-pass2">Confirm password</label>
+      <input
+        type="password"
+        id="reg-pass2"
+        onChange={(e) => {
+          if (refConfPasswd.current) {
+            onPassChange2(e);
+            if (e.target.value !== password)
+              refConfPasswd.current.style.display = "block";
+            else refConfPasswd.current.style.display = "none";
+          }
+        }}
+        value={password2}
+      />
+      <ConfirmPasswd
+        ref={refConfPasswd}
+        inputText={password2}
+        mainPasswd={password}
       />
       <button type="submit">Daftar</button>
     </form>
