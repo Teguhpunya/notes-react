@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ArchivedList } from "../components/ListNotes";
+import SearchBar from "../components/SearchBar";
 import { Note } from "../data/Note";
 import { getArchivedNotes } from "../utils";
 
@@ -37,25 +38,21 @@ class ArchiveComponent extends Component<Props, State> {
         note.body.toLowerCase().includes(_input)
     );
     this.setState(() => {
-      return { notes: result };
+      return { searchQuery: input, notes: result };
     });
   };
 
   render() {
+    const setSearchParam = this.props.setSearch;
+    const searchQuery = this.state.searchQuery;
+
     return (
       <>
-        <div className="container-search">
-          <input
-            type="text"
-            id="input-search"
-            placeholder="Cari catatan.."
-            onChange={(e) => {
-              this.eventOnSearchNote(e.target.value);
-            }}
-            onBlur={(e) => this.props.setSearch({ search: e.target.value })}
-            value={this.state.searchQuery}
-          />
-        </div>
+        <SearchBar
+          onChange={this.eventOnSearchNote}
+          onBlur={setSearchParam}
+          searchQuery={searchQuery}
+        />
         <ArchivedList currentState={this.state} />
       </>
     );

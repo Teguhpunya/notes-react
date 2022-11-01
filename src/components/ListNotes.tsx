@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Note } from "../data/Note";
 import parse from "html-react-parser";
+import { LangConsumer } from "../contexts/LangContext";
 
 const home = "/notes-react";
 
@@ -50,16 +51,22 @@ export const DefaultList = (props: Props) => {
   const defaultNotes = initialNotes.filter((note) => !note.archived);
 
   return (
-    <div className="container-base">
-      <div className="list-default">
-        <h2 className="card">Catatanku</h2>
-        <div className="list-background card">
-          <div className="list-note">
-            {RenderNoteList(defaultNotes, search)}
+    <LangConsumer>
+      {({ langData }) => {
+        return (
+          <div className="container-base">
+            <div className="list-default">
+              <h2 className="card">{langData.card.defaultSection}</h2>
+              <div className="list-background card">
+                <div className="list-note">
+                  {RenderNoteList(defaultNotes, search)}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        );
+      }}
+    </LangConsumer>
   );
 };
 
@@ -70,16 +77,22 @@ export const ArchivedList = (props: Props) => {
   const archivedNotes = initialNotes.filter((note) => note.archived);
 
   return (
-    <div className="container-base">
-      <div className="list-default">
-        <h2 className="card">Arsip</h2>
-        <div className="list-background card">
-          <div className="list-note">
-            {RenderNoteList(archivedNotes, search)}
+    <LangConsumer>
+      {({ langData }) => {
+        return (
+          <div className="container-base">
+            <div className="list-default">
+              <h2 className="card">{langData.card.archivedSection}</h2>
+              <div className="list-background card">
+                <div className="list-note">
+                  {RenderNoteList(archivedNotes, search)}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+        );
+      }}
+    </LangConsumer>
   );
 };
 

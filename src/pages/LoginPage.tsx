@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import LoginInput from "../components/LoginInput";
+import { LangConsumer } from "../contexts/LangContext";
 // import PropTypes from "prop-types";
 import { login } from "../utils/network-data";
 
@@ -15,21 +16,28 @@ const LoginPage = ({ loginSuccess }: Props) => {
     const { error, data } = await login({ email, password });
 
     if (!error) {
-      alert("Login berhasil!");
       loginSuccess(data);
     }
   }
 
   /* Main */
   return (
-    <div className="container-auth">
-      <h1>Login</h1>
-      <LoginInput input={onLogin} />
-      <p>
-        Belum punya akun?{" "}
-        <Link to="/notes-react/register">Daftar di sini.</Link>
-      </p>
-    </div>
+    <LangConsumer>
+      {({ langData }) => {
+        return (
+          <div className="container-auth">
+            <h1>Login</h1>
+            <LoginInput input={onLogin} />
+            <p>
+              {langData.authentication.noAccount}
+              <Link to="/notes-react/register">
+                {langData.authentication.registerHere}
+              </Link>
+            </p>
+          </div>
+        );
+      }}
+    </LangConsumer>
   );
 };
 
