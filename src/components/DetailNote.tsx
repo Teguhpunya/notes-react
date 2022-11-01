@@ -38,7 +38,7 @@ export default function DetailNote() {
       setNoteData(note);
     }
     if (id) getData(id);
-  }, []);
+  });
 
   if (noteData) {
     const title = noteData.title;
